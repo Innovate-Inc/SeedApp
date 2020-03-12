@@ -1,0 +1,36 @@
+# template.nginx
+
+# configuration of the server
+server {
+    # the port your site will be served on
+    listen      80;
+
+    # Compression config
+    gzip on;
+    #gzip_min_length 1000;
+    gzip_buffers 4 32k;
+    gzip_proxied any;
+    gzip_types text/plain application/javascript application/x-javascript text/javascript text/xml text/css application/json;
+    gzip_vary on;
+    gzip_disable "MSIE [1-6]\.(?!.*SV1)";
+
+    #    # the domain name it will serve for
+    server_name ${VIRTUAL_HOST};
+    charset     utf-8;
+
+    root /usr/share/nginx/html/ui;
+    index index.html;
+    try_files $uri $uri/ /index.html =404;
+
+    location /static {
+        alias /usr/share/nginx/html/static; # your Django project's static files - amend as required
+    }
+
+    location /api/ {
+        uwsgi_pass backend:3000;
+        uwsgi_read_timeout 60s;
+        uwsgi_send_timeout 60s;
+        uwsgi_connect_timeout 60s;
+        include uwsgi_params;
+    }
+}

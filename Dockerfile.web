@@ -1,0 +1,18 @@
+# Stage 0, based on Node.js, to build and compile Angular
+FROM node:lts-alpine as node
+
+WORKDIR /code
+COPY /ui/package.json /code/
+
+RUN npm install
+#RUN npm audit fix
+
+COPY /ui /code/
+
+RUN npm run-script build
+
+# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
+FROM nginx:alpine
+COPY ./template.nginx /etc/nginx/conf.d/template.nginx
+COPY --from=node /code/dist/ui/ /usr/share/nginx/html/ui/
+COPY --from=seedapp_backend:latest /code/static /usr/share/nginx/html/static
