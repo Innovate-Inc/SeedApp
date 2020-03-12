@@ -14,7 +14,7 @@ server {
     gzip_vary on;
     gzip_disable "MSIE [1-6]\.(?!.*SV1)";
 
-    #    # the domain name it will serve for
+    # the domain name it will serve for
     server_name ${VIRTUAL_HOST};
     charset     utf-8;
 
