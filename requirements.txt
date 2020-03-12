@@ -1,3 +1,4 @@
-django>=2.0,<2.99
+django
+djangorestframework
 psycopg2-binary
 uwsgi
